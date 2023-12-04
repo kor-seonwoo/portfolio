@@ -4,7 +4,6 @@ import Home from "./routes/Home";
 import Profile from "./routes/Profile";
 
 const GlobalReset = createGlobalStyle`
-  @import url('https://fonts.googleapis.com/css2?family=Noto+Sans:wght@300;400&family=Noto+Serif+KR:wght@300;400&display=swap');
   html, body, div, span, applet, object, iframe,
   h1, h2, h3, h4, h5, h6, p, blockquote, pre,
   a, abbr, acronym, address, big, cite, code,
@@ -38,9 +37,9 @@ const GlobalReset = createGlobalStyle`
     box-sizing: border-box;
   }
   body {
-    background-color: #ffffff;
-    font-family: 'Noto Sans', sans-serif;
-    color: #000000;
+    background-color: #F97D3C;
+    font-family: 'Pretendard';
+    color: #FFFFFF;
     line-height: 1;
     transition: background-color .3s;
   }
@@ -65,6 +64,16 @@ const GlobalReset = createGlobalStyle`
   }
   button{
     cursor: pointer;
+  }
+  .blind{
+    overflow: hidden;
+    position: absolute;
+    clip: rect(0, 0, 0, 0);
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    border: 0;
+    padding: 0;
   }
 `
 
