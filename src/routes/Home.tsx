@@ -173,6 +173,10 @@ const Option = styled.article`
                 font-weight: 400;
                 background-color: transparent;
                 color: #ffffff;
+                &.select{
+                    background-color: #ffffff;
+                    color: #000000;
+                }
             }
         }
     }
@@ -184,20 +188,62 @@ const ConfirmBox = styled.section`
     padding: 0 100px;
 `;
 
+interface ISelectOption {
+    pageId: number,
+    options: string[],
+}
+
 export default function Home() {
     const [currentPage, setCurrentPage] = useState(0);
-    const [currentCname, setCurrentCname] = useState(0);
+    const [currentCname, setCurrentCname] = useState("귀사");
+    const [selectedOptions, setSelectedOptions] = useState<ISelectOption[]>([]);
     const progressMath = (currentPage / qnaArr.length * 100);
     const backOnClick = () => {
         setCurrentPage(prev => prev - 1);
     }
     const nextOnClick = () => {
-        if (qnaArr.length === currentPage) return;
-        setCurrentPage(prev => prev + 1);
+        if (currentPage === 0) {
+            handleOptionClick(currentCname);
+            setCurrentPage(1);
+        }else{
+            if (qnaArr.length === currentPage) return;
+            const currOption = selectedOptions.find(item => item.pageId === currentPage);
+            if (currentPage > 0 && (currOption === undefined || currOption.options.length === 0)) { // 첫 번째 페이지는 스킵 가능 && 현재 페이지에서 답변을 선택한 적이 없거나, 선택을 모두 취소한 경우
+                alert("최소 1개 이상의 답변을 선택 부탁드리겠습니다.");
+            }else{
+                setCurrentPage(prev => prev + 1);
+            }
+        }
     }
     const textAreaChange = (e : React.ChangeEvent<HTMLTextAreaElement>) => {
-        setCurrentCname(e.target.value.length);
+        setCurrentCname(e.target.value);
     }
+    const handleOptionClick = (option: string) => {
+        setSelectedOptions(prev => {
+            const currentPageOptions = prev.find(item => item.pageId === currentPage);
+            if (currentPage === 0) { // currentPage가 0일 때
+                return [{ pageId: currentPage, options: [option] }, ...prev.slice(1)]; // 첫 번째 요소를 currentCname으로 업데이트하고 나머지 요소는 그대로 유지
+            }
+            if (currentPageOptions) { // 현재 페이징 번호를 가진 배열이 존재하는 경우
+                if (currentPageOptions.options.includes(option)) { // 선택된 옵션이 있을 경우
+                    return prev.map(item =>
+                        item.pageId === currentPage
+                        ? {...item, options: item.options.filter(del => del !== option)}
+                        : item
+                    );
+                }else{
+                    return prev.map(item => 
+                        item.pageId === currentPage 
+                        ? { ...item, options: [...item.options, option] } 
+                        : item
+                    );
+                }
+            }else {
+                return [...prev, { pageId: currentPage, options: [option] }];
+            }
+        });
+    }
+    console.log(selectedOptions);
     return (
         <Warpper>
             <ProgressBar $progress={progressMath}>
@@ -222,14 +268,14 @@ export default function Home() {
                     <div className="inner">
                         <div className="BtnArea">
                             {currentPage !== 0 ? <button type="button" onClick={backOnClick}>BACK</button> : <div></div>}
-                            <button type="button" onClick={nextOnClick}>{currentCname <= 0 ? "SKIP" : "NEXT"}</button>
+                            <button type="button" onClick={nextOnClick}>{(currentPage === 0 && currentCname.length <= 0) ? "SKIP" : "NEXT"}</button>
                         </div>
                         <div className={`Textarea ${currentPage === 0 && "active"}`}>
                             <textarea onChange={textAreaChange} maxLength={20} placeholder="귀사의 상호명을 적어주세요."></textarea>
                             <p>귀사의 상호는 제작자의 포트폴리오 확인에 있어 사용되며 외부 노출 및 저장에는 일절 사용되지 않습니다.</p>
                         </div>
                         <div className={`selectArea ${currentPage !== 0 && "active"}`}>
-                            {qnaArr[currentPage].options.map((item) => <button key={item} value={item}>{item}</button>)}
+                            {qnaArr[currentPage].options.map((item) => <button key={item} onClick={() => handleOptionClick(item)} className={selectedOptions.find((x) => x.pageId === currentPage && x.options.includes(item)) ? "select":""}>{item}</button>)}
                         </div>
                     </div>
                 </Option>
