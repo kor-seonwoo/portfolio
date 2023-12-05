@@ -1,6 +1,6 @@
 import styled from "styled-components"
 import { useState } from "react";
-import { TransitionGroup, CSSTransition } from 'react-transition-group';
+// import { TransitionGroup, CSSTransition } from 'react-transition-group';
 
 const qnaArr = [
     {
@@ -29,9 +29,9 @@ const Warpper = styled.main`
     width: 100%;
     height: 100vh;
     overflow: hidden;
-    > div{
+    /* > div{
         height: calc(100% - 224px);
-    }
+    } */
 `;
 
 const ProgressBar = styled.nav<{$progress: number}>`
@@ -53,7 +53,8 @@ const ContentBox = styled.section`
     flex-direction: column;
     justify-content: space-between;
     width: 100%;
-    height: 100%;
+    height: calc(100% - 224px);
+    /* height: 100%; */
     &.fade-enter-done{
         
     }
@@ -185,6 +186,7 @@ const ConfirmBox = styled.section`
 
 export default function Home() {
     const [currentPage, setCurrentPage] = useState(0);
+    const [currentCname, setCurrentCname] = useState(0);
     const progressMath = (currentPage / qnaArr.length * 100);
     const backOnClick = () => {
         setCurrentPage(prev => prev - 1);
@@ -194,8 +196,7 @@ export default function Home() {
         setCurrentPage(prev => prev + 1);
     }
     const textAreaChange = (e : React.ChangeEvent<HTMLTextAreaElement>) => {
-        console.log(e.target.value.length);
-        
+        setCurrentCname(e.target.value.length);
     }
     return (
         <Warpper>
@@ -203,41 +204,41 @@ export default function Home() {
                 <h2 className="blind">현재 진행률 : {progressMath}%</h2>
                 <span></span>
             </ProgressBar>
-            <TransitionGroup>
+            {/* <TransitionGroup>
                 <CSSTransition
                     key={currentPage}
                     timeout={500}
                     classNames="fade"
                 >
-                    {currentPage < 4 ?
-                    (<ContentBox>
-                        <Question>
-                            <p className="num">0{qnaArr[currentPage].id}.</p>
-                            <p className="textQ">{qnaArr[currentPage].question}</p>
-                        </Question>
-                        <Option className={currentPage === 0 ? "active" : ""}>
-                            <div className="inner">
-                                <div className="BtnArea">
-                                    {currentPage !== 0 ? <button type="button" onClick={backOnClick}>BACK</button> : <div></div>}
-                                    <button type="button" onClick={nextOnClick}>{1 <= 0 ? "SKIP" : "NEXT"}</button>
-                                </div>
-                                <div className={`Textarea ${currentPage === 0 && "active"}`}>
-                                    <textarea onChange={textAreaChange} maxLength={20} placeholder="귀사의 상호명을 적어주세요."></textarea>
-                                    <p>귀사의 상호는 제작자의 포트폴리오 확인에 있어 사용되며 외부 노출 및 저장에는 일절 사용되지 않습니다.</p>
-                                </div>
-                                <div className={`selectArea ${currentPage !== 0 && "active"}`}>
-                                    {qnaArr[currentPage].options.map((item) => <button key={item}>{item}</button>)}
-                                </div>
-                            </div>
-                        </Option>
-                    </ContentBox>)
-                    :
-                    (<ConfirmBox>
-                        사용자가 고른 항목들을 최종 확인 시켜준 후 결과 페이지 이동 버튼 노출
-                    </ConfirmBox>)
-                    }
                 </CSSTransition>
-            </TransitionGroup>
+            </TransitionGroup> */}
+            {currentPage < 4 ?
+            (<ContentBox>
+                <Question>
+                    <p className="num">0{qnaArr[currentPage].id}.</p>
+                    <p className="textQ">{qnaArr[currentPage].question}</p>
+                </Question>
+                <Option className={currentPage === 0 ? "active" : ""}>
+                    <div className="inner">
+                        <div className="BtnArea">
+                            {currentPage !== 0 ? <button type="button" onClick={backOnClick}>BACK</button> : <div></div>}
+                            <button type="button" onClick={nextOnClick}>{currentCname <= 0 ? "SKIP" : "NEXT"}</button>
+                        </div>
+                        <div className={`Textarea ${currentPage === 0 && "active"}`}>
+                            <textarea onChange={textAreaChange} maxLength={20} placeholder="귀사의 상호명을 적어주세요."></textarea>
+                            <p>귀사의 상호는 제작자의 포트폴리오 확인에 있어 사용되며 외부 노출 및 저장에는 일절 사용되지 않습니다.</p>
+                        </div>
+                        <div className={`selectArea ${currentPage !== 0 && "active"}`}>
+                            {qnaArr[currentPage].options.map((item) => <button key={item} value={item}>{item}</button>)}
+                        </div>
+                    </div>
+                </Option>
+            </ContentBox>)
+            :
+            (<ConfirmBox>
+                사용자가 고른 항목들을 최종 확인 시켜준 후 결과 페이지 이동 버튼 노출
+            </ConfirmBox>)
+            }
         </Warpper>
     )
 }
