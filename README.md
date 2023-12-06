@@ -3,7 +3,7 @@
 ## 목표
 
 MBTI, 각종 성격 테스트 검사를 모티브로 "인재를 찾아라!"라는 SPA 포트폴리오 제작
-포트폴리오 특성상 제작자를 뽐내야하기에 reuslt 값은 항상 **나**!
+포트폴리오 특성상 제작자를 뽐내야하기에 result 값은 항상 **나**!
 
 - <code>state</code>를 활용한 paging 관리
 - <code>react-transition-group</code>를 활용한 css transition 모션 적용
