@@ -21,7 +21,7 @@ MBTI, 각종 성격 테스트 검사를 모티브로 "인재를 찾아라!"라�
 
 ### # 실행모습 ↓
 
-gif 준비중...
+![portfolio_01](https://github.com/kor-seonwoo/portfolio/assets/74663731/1fc00f90-930b-43bb-8a7c-2ba731aedfae)
 
 ---
 
