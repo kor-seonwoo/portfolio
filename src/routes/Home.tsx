@@ -1,11 +1,13 @@
 import styled from "styled-components"
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import Loading from "../components/Loading";
 // import { TransitionGroup, CSSTransition } from 'react-transition-group';
 
 const qnaArr = [
     {
         id: 1,
-        question: "안녕하세요! 방문을 환영합니다.",
+        question: `안녕하세요! 방문을 환영합니다.`,
         options: [],
     },
     {
@@ -163,7 +165,7 @@ const Option = styled.article`
         .selectArea{
             display: flex;
             flex-wrap: wrap;
-            gap: 42px;
+            gap: 28px 42px;
             margin-top: 28px;
             > button{
                 padding: 14px 28px;
@@ -178,6 +180,12 @@ const Option = styled.article`
                     color: #000000;
                 }
             }
+            p{
+                width: 100%;
+                font-size: 16px;
+                font-weight: 400;
+                line-height: 1.3;
+            }
         }
     }
 `;
@@ -186,6 +194,30 @@ const ConfirmBox = styled.section`
     width: 100%;
     height: calc(100% - 224px);
     padding: 0 100px;
+    p{
+        font-size: 52px;
+        font-weight: 400;
+        line-height: 1.4;
+        span{
+            font-weight: 600;
+            color: greenyellow;
+        }
+    }
+    > button{
+        display: block;
+        width: 186px;
+        padding: 14px 5px;
+        border: 1px solid #ffffff;
+        border-radius: 36px;
+        font-size: 24px;
+        font-weight: 400;
+        text-align: center;
+        margin-top: 90px;
+        &:hover,&:focus{
+            background-color: #ffffff;
+            color: #000000;
+        }
+    }
 `;
 
 interface ISelectOption {
@@ -194,9 +226,11 @@ interface ISelectOption {
 }
 
 export default function Home() {
+    const navigate = useNavigate();
     const [currentPage, setCurrentPage] = useState(0);
-    const [currentCname, setCurrentCname] = useState("귀사");
+    const [currentCname, setCurrentCname] = useState("");
     const [selectedOptions, setSelectedOptions] = useState<ISelectOption[]>([]);
+    const [isLoading, setIsLoading] = useState(false);
     const progressMath = (currentPage / qnaArr.length * 100);
     const backOnClick = () => {
         setCurrentPage(prev => prev - 1);
@@ -243,48 +277,67 @@ export default function Home() {
             }
         });
     }
-    console.log(selectedOptions);
+    const resultOnClick = () => {
+        setIsLoading(true);
+        setTimeout(() => {
+            navigate("/profile");
+            setIsLoading(false);
+        }, 3000);
+    }
     return (
-        <Warpper>
-            <ProgressBar $progress={progressMath}>
-                <h2 className="blind">현재 진행률 : {progressMath}%</h2>
-                <span></span>
-            </ProgressBar>
-            {/* <TransitionGroup>
-                <CSSTransition
-                    key={currentPage}
-                    timeout={500}
-                    classNames="fade"
-                >
-                </CSSTransition>
-            </TransitionGroup> */}
-            {currentPage < 4 ?
-            (<ContentBox>
-                <Question>
-                    <p className="num">0{qnaArr[currentPage].id}.</p>
-                    <p className="textQ">{qnaArr[currentPage].question}</p>
-                </Question>
-                <Option className={currentPage === 0 ? "active" : ""}>
-                    <div className="inner">
-                        <div className="BtnArea">
-                            {currentPage !== 0 ? <button type="button" onClick={backOnClick}>BACK</button> : <div></div>}
-                            <button type="button" onClick={nextOnClick}>{(currentPage === 0 && currentCname.length <= 0) ? "SKIP" : "NEXT"}</button>
-                        </div>
-                        <div className={`Textarea ${currentPage === 0 && "active"}`}>
-                            <textarea onChange={textAreaChange} maxLength={20} placeholder="귀사의 상호명을 적어주세요."></textarea>
-                            <p>귀사의 상호는 제작자의 포트폴리오 확인에 있어 사용되며 외부 노출 및 저장에는 일절 사용되지 않습니다.</p>
-                        </div>
-                        <div className={`selectArea ${currentPage !== 0 && "active"}`}>
-                            {qnaArr[currentPage].options.map((item) => <button key={item} onClick={() => handleOptionClick(item)} className={selectedOptions.find((x) => x.pageId === currentPage && x.options.includes(item)) ? "select":""}>{item}</button>)}
-                        </div>
-                    </div>
-                </Option>
-            </ContentBox>)
+        <>
+            {isLoading ?
+            <Loading />
             :
-            (<ConfirmBox>
-                사용자가 고른 항목들을 최종 확인 시켜준 후 결과 페이지 이동 버튼 노출
-            </ConfirmBox>)
+            <Warpper>
+                <ProgressBar $progress={progressMath}>
+                    <h2 className="blind">현재 진행률 : {progressMath}%</h2>
+                    <span></span>
+                </ProgressBar>
+                {/* <TransitionGroup>
+                    <CSSTransition
+                        key={currentPage}
+                        timeout={500}
+                        classNames="fade"
+                    >
+                    </CSSTransition>
+                </TransitionGroup> */}
+                {currentPage < 4 ?
+                (<ContentBox>
+                    <Question>
+                        <p className="num">0{qnaArr[currentPage].id}.</p>
+                        <p className="textQ">{qnaArr[currentPage].question}</p>
+                    </Question>
+                    <Option className={currentPage === 0 ? "active" : ""}>
+                        <div className="inner">
+                            <div className="BtnArea">
+                                {currentPage !== 0 ? <button type="button" onClick={backOnClick}>BACK</button> : <div></div>}
+                                <button type="button" onClick={nextOnClick}>{(currentPage === 0 && currentCname.length <= 0) ? "SKIP" : "NEXT"}</button>
+                            </div>
+                            <div className={`Textarea ${currentPage === 0 && "active"}`}>
+                                <textarea onChange={textAreaChange} maxLength={20} placeholder="귀사의 상호명을 적어주세요."></textarea>
+                                <p>귀사의 상호는 제작자의 포트폴리오 확인에 있어 사용되며 외부 노출 및 저장에는 일절 사용되지 않습니다.</p>
+                            </div>
+                            <div className={`selectArea ${currentPage !== 0 && "active"}`}>
+                                <p>※ 다중 선택 가능</p>
+                                {qnaArr[currentPage].options.map((item) => <button key={item} onClick={() => handleOptionClick(item)} className={selectedOptions.find((x) => x.pageId === currentPage && x.options.includes(item)) ? "select":""}>{item}</button>)}
+                            </div>
+                        </div>
+                    </Option>
+                </ContentBox>)
+                :
+                (<ConfirmBox>
+                    <p><span>{selectedOptions[0].options.length < 0 ? selectedOptions[0].options:"귀사"}</span>의 담당자님께서는 <br />
+                    <span>{selectedOptions[2].options.join(", ")}</span>를 <span>{selectedOptions[1].options.join(", ")}</span>으로 채용할 계획이 있으며, <br />
+                    해당 <span>{selectedOptions[2].options.join(", ")}</span>가 필수로 갖추어야 할 기술 스택으로는 <br />
+                    <span>{selectedOptions[3].options.join(", ")}</span>로 총 <span>{selectedOptions[3].options.length}</span>개 입니다. <br />
+                    해당 조건으로 인재를 검색 하시겠습니까?
+                    </p>
+                    <button onClick={() => {setSelectedOptions([]); setCurrentCname(""); resultOnClick();}}>인재 검색하기</button>
+                </ConfirmBox>)
+                }
+            </Warpper>
             }
-        </Warpper>
+        </>
     )
 }
