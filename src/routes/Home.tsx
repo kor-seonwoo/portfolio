@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Loading from "../components/Loading";
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
+import { Toaster,toast } from "react-hot-toast";
 
 const qnaArr = [
     {
@@ -398,7 +399,7 @@ export default function Home() {
             if (qnaArr.length === currentPage) return;
             const currOption = selectedOptions.find(item => item.pageId === currentPage);
             if (currentPage > 0 && (currOption === undefined || currOption.options.length === 0)) { // 첫 번째 페이지는 스킵 가능 && 현재 페이지에서 답변을 선택한 적이 없거나, 선택을 모두 취소한 경우
-                alert("최소 1개 이상의 답변을 선택 부탁드리겠습니다.");
+                toast.error('1개 이상의 답변을 선택해주세요.');
             }else{
                 setCurrentPage(prev => prev + 1);
             }
@@ -445,6 +446,10 @@ export default function Home() {
             <Loading />
             :
             <Warpper>
+                <Toaster
+                    position="top-right"
+                    reverseOrder={false}
+                />
                 <ProgressBar $progress={progressMath}>
                     <h2 className="blind">현재 진행률 : {progressMath}%, 현재 페이지 : {currentPage}번</h2>
                     <span></span>
