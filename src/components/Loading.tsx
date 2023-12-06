@@ -9,11 +9,25 @@ const Wrapper = styled.div`
     width: 100%;
     height: 100vh;
     text-align: center;
+    svg{
+        width: 150px;
+        height: 150px;
+    }
     p{  
         font-size: 20px;
         font-weight: 400;
         line-height: 1.4;
         margin-top: 30px;
+    }
+    @media screen and (max-width: 560px){
+        svg{
+            width: 100px;
+            height: 100px;
+        }
+        p{  
+            font-size: 17px;
+            margin-top: 20px;
+        }
     }
 `;
 
@@ -22,8 +36,6 @@ export default function Loading() {
         <Wrapper>
             <BallTriangle
                 color="#ffffff"
-                width={130}
-                height={130}
             />
             <p>인재를 찾고 있습니다. <br /> 잠시만 기다려주세요.</p>
         </Wrapper>

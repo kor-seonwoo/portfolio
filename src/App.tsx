@@ -42,6 +42,7 @@ const GlobalReset = createGlobalStyle`
     color: #FFFFFF;
     line-height: 1;
     transition: background-color .3s;
+    word-break: keep-all;
   }
   menu, ol, ul {
     list-style: none;

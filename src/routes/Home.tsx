@@ -27,12 +27,15 @@ const qnaArr = [
         question: "인재가 보유했으면 하는 기술 스택은 무엇인가요?",
         options: ["JavaScript","TypeScript","React","HTML5","SCSS","CSS3","Next.js","node.js","firbase","MySQL","Git"],
     }
-]
+];
 
 const Warpper = styled.main`
     width: 100%;
     height: 100vh;
     overflow: hidden;
+    @media screen and (max-width: 1024px){
+        overflow: hidden auto;
+    }
 `;
 
 const ProgressBar = styled.nav<{$progress: number}>`
@@ -47,6 +50,12 @@ const ProgressBar = styled.nav<{$progress: number}>`
         background-color: #000000;
         transition: .4s;
     }
+    @media screen and (max-width: 1400px){
+        margin: 50px 0 70px;
+    }
+    @media screen and (max-width: 560px){
+        margin: 20px 0 30px;
+    }
 `;
 
 const ContentBox = styled.section`
@@ -54,7 +63,13 @@ const ContentBox = styled.section`
     flex-direction: column;
     justify-content: space-between;
     width: 100%;
-    height: calc(100% - 221px);
+    height: calc(100% - 222px);
+    @media screen and (max-width: 1400px){
+        height: calc(100% - 122px);
+    }
+    @media screen and (max-width: 560px){
+        height: calc(100% - 52px);
+    }
 `;
 
 const Question = styled.article`
@@ -86,6 +101,23 @@ const Question = styled.article`
         line-height: 1.3;
         margin-top: 24px;
         transition: .4s;
+    }
+    @media screen and (max-width: 1400px){
+        padding: 0 50px;
+        .textQ{
+            font-size: 44px;
+            margin-top: 15px;
+        }
+    }
+    @media screen and (max-width: 560px){
+        padding: 0 10px;
+        .num{
+            font-size: 16px;
+        }
+        .textQ{
+            font-size: 28px;
+            margin-top: 10px;
+        }
     }
 `;
 
@@ -294,6 +326,63 @@ const Option = styled.article<{$beforeBgColor: number}>`
             }
         }
     }
+    @media screen and (max-width: 1400px){
+        height: 300px;
+        padding: 0 50px;
+        &.option-enter-done,&.option-appear-done{
+            height: 300px;
+        }
+        .inner{
+            .selectArea{
+                gap: 28px 30px;
+            }
+        }
+    }
+    @media screen and (max-width: 560px){
+        height: auto;
+        padding: 0 10px;
+        &.option-enter-done,&.option-appear-done{
+            height: auto;
+            .inner .BtnArea{
+                top: -10px;
+            }
+        }
+        .inner{
+            padding: 10px 0 30px;
+            .BtnArea{
+                top: -10px;
+                > button{
+                    font-size: 16px;
+                }
+            }
+            .Textarea{
+                textarea{
+                    height: 60px;
+                    padding: 10px;
+                    margin: 0 auto 15px;
+                    font-size: 16px;
+                    &::placeholder{
+                        font-size: 16px;
+                    }
+                }
+                p{
+                    font-size: 13px;
+                }
+            }
+            .selectArea{
+                gap: 12px;
+                padding-top: 15px;
+                p{
+                    font-size: 14px;
+                }
+                > button{
+                    padding: 7px 14px;
+                    border: 1px solid #ffffff;
+                    font-size: 16px;
+                }
+            }
+        }
+    }
 `;
 const PageButton = styled.button<{$beforeText: string}>`
     position: relative;
@@ -372,6 +461,34 @@ const ConfirmBox = styled.section`
                 left: -1px;
                 width: calc(100% + 2px);
             }
+        }
+    }
+    @media screen and (max-width: 1400px){
+        height: calc(100% - 122px);
+        padding: 0 50px;
+        p{
+            font-size: 42px;
+        }
+    }
+    @media screen and (max-width: 1024px){
+        p{
+            font-size: 35px;
+        }
+    }
+    @media screen and (max-width: 560px){
+        height: calc(100% - 52px);
+        padding: 0 10px 30px;
+        p{
+            font-size: 25px;
+            br{
+                margin-top: 10px;
+            }
+        }
+        > button{
+            width: auto;
+            padding: 7px 14px;
+            margin-top: 20px;
+            font-size: 16px;
         }
     }
 `;
