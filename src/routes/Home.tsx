@@ -393,14 +393,20 @@ export default function Home() {
     }
     const nextOnClick = () => {
         if (currentPage === 0) {
+            if (currentCname === "") {
+                toast.success("안녕하세요 담당자님! \n인재 찾기 설문을 시작합니다.");
+            }else{
+                toast.success(`안녕하세요 ${currentCname} 담당자님! \n인재 찾기 설문을 시작합니다.`);
+            }
             handleOptionClick(currentCname);
             setCurrentPage(1);
         }else{
             if (qnaArr.length === currentPage) return;
             const currOption = selectedOptions.find(item => item.pageId === currentPage);
             if (currentPage > 0 && (currOption === undefined || currOption.options.length === 0)) { // 첫 번째 페이지는 스킵 가능 && 현재 페이지에서 답변을 선택한 적이 없거나, 선택을 모두 취소한 경우
-                toast.error('1개 이상의 답변을 선택해주세요.');
+                toast.error("1개 이상의 답변을 선택해주세요.");
             }else{
+                toast.success("정상적으로 선택되었습니다!");
                 setCurrentPage(prev => prev + 1);
             }
         }
@@ -449,6 +455,9 @@ export default function Home() {
                 <Toaster
                     position="top-right"
                     reverseOrder={false}
+                    toastOptions={{
+                        duration: 4000,
+                    }}
                 />
                 <ProgressBar $progress={progressMath}>
                     <h2 className="blind">현재 진행률 : {progressMath}%, 현재 페이지 : {currentPage}번</h2>
@@ -491,7 +500,7 @@ export default function Home() {
                                         </div>
                                         {currentPage === 0 ?
                                         (<div className="Textarea">
-                                            <textarea onChange={textAreaChange} maxLength={20} placeholder="귀사의 상호명을 적어주세요."></textarea>
+                                            <textarea onChange={textAreaChange} maxLength={20} placeholder="귀사의 상호명을 적어주세요." value={currentCname}></textarea>
                                             <p>귀사의 상호는 제작자의 포트폴리오 확인에 있어 사용되며 외부 노출 및 저장에는 일절 사용되지 않습니다.</p>
                                         </div>)
                                         :
