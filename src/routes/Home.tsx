@@ -1,13 +1,14 @@
+import React from "react";
 import styled from "styled-components"
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Loading from "../components/Loading";
-// import { TransitionGroup, CSSTransition } from 'react-transition-group';
+import { TransitionGroup, CSSTransition } from 'react-transition-group';
 
 const qnaArr = [
     {
         id: 1,
-        question: `안녕하세요! 방문을 환영합니다.`,
+        question: `안녕하세요!\n 방문을 환영합니다.`,
         options: [],
     },
     {
@@ -31,14 +32,11 @@ const Warpper = styled.main`
     width: 100%;
     height: 100vh;
     overflow: hidden;
-    /* > div{
-        height: calc(100% - 224px);
-    } */
 `;
 
 const ProgressBar = styled.nav<{$progress: number}>`
     width: 100%;
-    height: 4px;
+    height: 2px;
     background-color: #ffffff;
     margin: 100px 0 120px;
     > span{
@@ -55,36 +53,112 @@ const ContentBox = styled.section`
     flex-direction: column;
     justify-content: space-between;
     width: 100%;
-    height: calc(100% - 224px);
-    /* height: 100%; */
-    &.fade-enter-done{
-        
-    }
+    height: calc(100% - 221px);
 `;
 
 const Question = styled.article`
     width: 100%;
     padding: 0 100px;
+    &.question-exit,&.question-exit-done{
+        display: none;
+    }
+    &.question-enter, &.question-appear{
+        .num,.textQ{
+            margin-left: 60px;
+            opacity: 0;
+        }
+    }
+    &.question-enter-done, &.question-appear-done{
+        .num,.textQ{
+            margin-left: 0;
+            opacity: 1;
+        }
+    }
     .num{
         font-size: 20px;
         font-weight: 600;
+        transition: .4s;
     }
     .textQ{
-        font-size: 62px;
+        font-size: 54px;
         font-weight: 400;
         line-height: 1.3;
-        margin-top: 23px;
+        margin-top: 24px;
+        transition: .4s;
     }
 `;
 
-const Option = styled.article`
+const Option = styled.article<{$beforeBgColor: number}>`
     position: relative;
     width: 100%;
     height: 339px;
     padding: 0 100px;
-    &.active{
+    &.option-exit{
+        .inner{
+            .Textarea{
+                display: none;
+            }
+        }
+    }
+    &.option-enter,&.option-appear{
+        height: 0;
+        overflow: hidden;
         &::before{
-            height: 100%;
+            height: 0;
+        }
+        .inner{
+            &::before{
+                width: 0;
+            }
+            .BtnArea{
+                top: 0;
+                opacity: 0;
+            }
+            .Textarea{
+                textarea{
+                    width: 200px;
+                    opacity: 0;
+                }
+                p{
+                    opacity: 0;
+                }
+            }
+            .selectArea{
+                top: 50px;
+                p, >button{
+                    opacity: 0;
+                }
+            }
+        }
+    }
+    &.option-enter-done,&.option-appear-done{
+        height: 339px;
+        &::before{
+            height: ${(props) => props.$beforeBgColor}%;
+        }
+        .inner{
+            &::before{
+                width: 100%;
+            }
+            .BtnArea{
+                top: -20px;
+                opacity: 1;
+            }
+            .Textarea{
+                textarea{
+                    width: 100%;
+                    opacity: 1;
+                }
+                p{
+                    opacity: 1;
+                }
+            }
+            .selectArea{
+                top: 0;
+                p, >button{
+                    opacity: 1;
+                }
+            }
         }
     }
     &::before{
@@ -96,63 +170,68 @@ const Option = styled.article`
         width: 100%;
         height: 0;
         background-color: #ffffff;
-        transition: .5s;
+        transition: .6s;
     }
     .inner{
         position: relative;
         z-index: 10;
-        border-top: 4px solid #ffffff;
         width: 100%;
         height: 100%;
+        &::before{
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            height: 1px;
+            background-color: #ffffff;
+            transition: width .6s;
+        }
         .BtnArea{
             position: absolute;
             left: 0;
-            top: -24px;
+            top: -20px;
             transform: translateY(-100%);
             display: flex;
             flex-wrap: wrap;
             justify-content: space-between;
             width: 100%;
+            transition: opacity .6s;
             > button{
+                padding: 0;
                 background-color: transparent;
                 border: none;
                 font-size: 20px;
                 font-weight: 400;
                 color: #ffffff;
+                transition: .2s;
             }
         }
         .Textarea{
-            position: relative;
-            left: 50px;
-            opacity: 0;
-            visibility: hidden;
-            height: 0;
-            &.active{
-                left: 0;
-                opacity: 1;
-                visibility: visible;
-                height: auto;
-                transition: 1s ease-out .5s;
+            textarea,p{
+                transition: opacity 1s ease-out .6s, width 1s ease-out .6s;
             }
             textarea{
-                width: 100%;
+                position: relative;
+                font-family: 'Pretendard';
                 height: 164px;
                 border: 1px solid #A4A4A4;
-                border-radius: 18px;
-                padding: 24px;
+                border-radius: 4px;
+                padding: 20px;
                 margin: 28px auto;
-                font-size: 24px;
+                font-size: 20px;
                 font-weight: 400;
                 color: #A4A4A4;
                 resize: none;
                 &::placeholder{
-                    font-size: 24px;
+                    font-size: 20px;
                     font-weight: 400;
                     color: #A4A4A4;
                 }
                 &:focus {
                     outline: none;
-                    border-color: #F97D3C;
+                    border: 2px solid #F97D3C;
                 }
             }
             p{
@@ -163,59 +242,135 @@ const Option = styled.article`
             }
         }
         .selectArea{
+            position: relative;
             display: flex;
             flex-wrap: wrap;
             gap: 28px 42px;
-            margin-top: 28px;
-            > button{
-                padding: 14px 28px;
-                border: 1px solid #ffffff;
-                border-radius: 36px;
-                font-size: 24px;
-                font-weight: 400;
-                background-color: transparent;
-                color: #ffffff;
-                &.select{
-                    background-color: #ffffff;
-                    color: #000000;
-                }
-            }
+            padding-top: 28px;
+            transition: .6s;
             p{
                 width: 100%;
                 font-size: 16px;
                 font-weight: 400;
                 line-height: 1.3;
+                transition: .6s;
             }
+            > button{
+                position: relative;
+                padding: 14px 28px;
+                border: 1px solid #ffffff;
+                border-radius: 36px;
+                font-size: 20px;
+                font-weight: 400;
+                background-color: transparent;
+                color: #ffffff;
+                overflow: hidden;
+                transition: .6s;
+                &.select{
+                    background-color: #ffffff;
+                    color: #000000;
+                }
+                &::before{
+                    content: "";
+                    position: absolute;
+                    right: -1px;
+                    top: -1px;
+                    transform: translateY(0);
+                    z-index: -1;
+                    width: 0;
+                    height: calc(100% + 2px);
+                    background-color: #ffffff;
+                    border-radius: 36px;
+                    transition: .4s;
+                }
+                &:hover{
+                    color: #000000;
+                    &::before{
+                        left: -1px;
+                        width: calc(100% + 2px);
+                    }
+                }
+            }
+        }
+    }
+`;
+const PageButton = styled.button<{$beforeText: string}>`
+    position: relative;
+    &::before{
+        content: "${(props) => props.$beforeText}";
+        position: absolute;
+        left: 0;
+        top: 0;
+        color: #000000;
+        width: 0;
+        overflow: hidden;
+        transition: .4s;
+    }
+    &:hover,&:focus{
+        &::before{
+            width: 100%;
         }
     }
 `;
 
 const ConfirmBox = styled.section`
     width: 100%;
-    height: calc(100% - 224px);
+    height: calc(100% - 221px);
     padding: 0 100px;
+    &.confirm-enter{
+        p,> button{
+            opacity: 0;
+        }
+    }
+    &.confirm-enter-done{
+        p,> button{
+            opacity: 1;
+        }
+    }
     p{
-        font-size: 52px;
+        font-size: 54px;
         font-weight: 400;
         line-height: 1.4;
+        transition: opacity .6s;
         span{
             font-weight: 600;
             color: greenyellow;
         }
     }
     > button{
+        position: relative;
         display: block;
         width: 186px;
         padding: 14px 5px;
         border: 1px solid #ffffff;
+        background-color: transparent;
         border-radius: 36px;
-        font-size: 24px;
+        font-size: 20px;
         font-weight: 400;
         text-align: center;
         margin-top: 90px;
-        &:hover,&:focus{
+        overflow: hidden;
+        color: #ffffff;
+        transition: .6s;
+        &::before{
+            content: "";
+            position: absolute;
+            right: -1px;
+            top: -1px;
+            transform: translateY(0);
+            z-index: -1;
+            width: 0;
+            height: calc(100% + 2px);
             background-color: #ffffff;
+            border-radius: 36px;
+            transition: .4s;
+        }
+        &:hover,&:focus{
             color: #000000;
+            &::before{
+                left: -1px;
+                width: calc(100% + 2px);
+            }
         }
     }
 `;
@@ -291,51 +446,71 @@ export default function Home() {
             :
             <Warpper>
                 <ProgressBar $progress={progressMath}>
-                    <h2 className="blind">현재 진행률 : {progressMath}%</h2>
+                    <h2 className="blind">현재 진행률 : {progressMath}%, 현재 페이지 : {currentPage}번</h2>
                     <span></span>
                 </ProgressBar>
-                {/* <TransitionGroup>
-                    <CSSTransition
-                        key={currentPage}
-                        timeout={500}
-                        classNames="fade"
-                    >
-                    </CSSTransition>
-                </TransitionGroup> */}
-                {currentPage < 4 ?
-                (<ContentBox>
-                    <Question>
-                        <p className="num">0{qnaArr[currentPage].id}.</p>
-                        <p className="textQ">{qnaArr[currentPage].question}</p>
-                    </Question>
-                    <Option className={currentPage === 0 ? "active" : ""}>
-                        <div className="inner">
-                            <div className="BtnArea">
-                                {currentPage !== 0 ? <button type="button" onClick={backOnClick}>BACK</button> : <div></div>}
-                                <button type="button" onClick={nextOnClick}>{(currentPage === 0 && currentCname.length <= 0) ? "SKIP" : "NEXT"}</button>
-                            </div>
-                            <div className={`Textarea ${currentPage === 0 && "active"}`}>
-                                <textarea onChange={textAreaChange} maxLength={20} placeholder="귀사의 상호명을 적어주세요."></textarea>
-                                <p>귀사의 상호는 제작자의 포트폴리오 확인에 있어 사용되며 외부 노출 및 저장에는 일절 사용되지 않습니다.</p>
-                            </div>
-                            <div className={`selectArea ${currentPage !== 0 && "active"}`}>
-                                <p>※ 다중 선택 가능</p>
-                                {qnaArr[currentPage].options.map((item) => <button key={item} onClick={() => handleOptionClick(item)} className={selectedOptions.find((x) => x.pageId === currentPage && x.options.includes(item)) ? "select":""}>{item}</button>)}
-                            </div>
-                        </div>
-                    </Option>
-                </ContentBox>)
-                :
-                (<ConfirmBox>
-                    <p><span>{selectedOptions[0].options[0] !== "" ? selectedOptions[0].options:"귀사"}</span>의 담당자님께서는 <br />
-                    <span>{selectedOptions[2].options.join(", ")}</span>를 <span>{selectedOptions[1].options.join(", ")}</span>으로 채용할 계획이 있으며, <br />
-                    해당 <span>{selectedOptions[2].options.join(", ")}</span>가 필수로 갖추어야 할 기술 스택으로는 <br />
-                    <span>{selectedOptions[3].options.join(", ")}</span>로 총 <span>{selectedOptions[3].options.length}</span>개 입니다. <br />
-                    해당 조건으로 인재를 검색 하시겠습니까?
-                    </p>
-                    <button onClick={() => {setSelectedOptions([]); setCurrentCname(""); resultOnClick();}}>인재 검색하기</button>
-                </ConfirmBox>)
-                }
+                    {currentPage < 4 ?
+                    (<ContentBox>
+                        <TransitionGroup>
+                            <CSSTransition
+                                key={currentPage}
+                                timeout={500}
+                                classNames="question"
+                                appear
+                            >
+                                <Question>
+                                    <p className="num">0{qnaArr[currentPage].id}.</p>
+                                    <p className="textQ">
+                                        {qnaArr[currentPage].question.split('\n').map((line, index) => (
+                                            <React.Fragment key={index}>
+                                                {line}
+                                                <br />
+                                            </React.Fragment>
+                                        ))}
+                                    </p>
+                                </Question>
+                            </CSSTransition>
+                        </TransitionGroup>
+                        <TransitionGroup>
+                            <CSSTransition
+                                key={currentPage}
+                                timeout={500}
+                                classNames="option"
+                                appear
+                            >
+                                <Option $beforeBgColor={currentPage === 0 ? 100:0}>
+                                    <div className="inner">
+                                        <div className="BtnArea">
+                                            {currentPage !== 0 ? <PageButton type="button" onClick={backOnClick} $beforeText="BACK">BACK</PageButton> : <div></div>}
+                                            <PageButton type="button" onClick={nextOnClick} $beforeText={(currentPage === 0 && currentCname.length <= 0) ? "SKIP" : "NEXT"}>{(currentPage === 0 && currentCname.length <= 0) ? "SKIP" : "NEXT"}</PageButton>
+                                        </div>
+                                        {currentPage === 0 ?
+                                        (<div className="Textarea">
+                                            <textarea onChange={textAreaChange} maxLength={20} placeholder="귀사의 상호명을 적어주세요."></textarea>
+                                            <p>귀사의 상호는 제작자의 포트폴리오 확인에 있어 사용되며 외부 노출 및 저장에는 일절 사용되지 않습니다.</p>
+                                        </div>)
+                                        :
+                                        (<div className="selectArea">
+                                           {currentPage !== 0 && <p>※ 다중 선택 가능</p>}
+                                            {qnaArr[currentPage].options.map((item) => <button key={item} onClick={() => handleOptionClick(item)} className={selectedOptions.find((x) => x.pageId === currentPage && x.options.includes(item)) ? "select":""}>{item}</button>)}
+                                        </div>)
+                                        }
+                                    </div>
+                                </Option>
+                            </CSSTransition>
+                        </TransitionGroup>
+                    </ContentBox>)
+                    :
+                    (<ConfirmBox>
+                        <p><span>{selectedOptions[0].options[0] !== "" ? selectedOptions[0].options:"귀사"}</span>의 담당자님께서는 <br />
+                        <span>{selectedOptions[2].options.join(", ")}</span>를 <span>{selectedOptions[1].options.join(", ")}</span>으로 채용할 계획이 있으며, <br />
+                        해당 <span>{selectedOptions[2].options.join(", ")}</span>가 필수로 갖추어야 할 기술 스택으로는 <br />
+                        <span>{selectedOptions[3].options.join(", ")}</span>로 총 <span>{selectedOptions[3].options.length}</span>개 입니다. <br />
+                        해당 조건으로 인재를 검색 하시겠습니까?
+                        </p>
+                        <button onClick={() => {setSelectedOptions([]); setCurrentCname(""); resultOnClick();}}>인재 검색하기</button>
+                    </ConfirmBox>)
+                    }
             </Warpper>
             }
         </>
