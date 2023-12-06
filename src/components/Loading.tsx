@@ -2,9 +2,6 @@ import { BallTriangle } from "react-loader-spinner";
 import styled from "styled-components";
 
 const Wrapper = styled.div`
-    position: fixed;
-    left: 0;
-    top: 0;
     display: flex;
     flex-direction: column;
     align-items: center;

@@ -327,7 +327,7 @@ export default function Home() {
                 </ContentBox>)
                 :
                 (<ConfirmBox>
-                    <p><span>{selectedOptions[0].options.length < 0 ? selectedOptions[0].options:"귀사"}</span>의 담당자님께서는 <br />
+                    <p><span>{selectedOptions[0].options[0] !== "" ? selectedOptions[0].options:"귀사"}</span>의 담당자님께서는 <br />
                     <span>{selectedOptions[2].options.join(", ")}</span>를 <span>{selectedOptions[1].options.join(", ")}</span>으로 채용할 계획이 있으며, <br />
                     해당 <span>{selectedOptions[2].options.join(", ")}</span>가 필수로 갖추어야 할 기술 스택으로는 <br />
                     <span>{selectedOptions[3].options.join(", ")}</span>로 총 <span>{selectedOptions[3].options.length}</span>개 입니다. <br />
