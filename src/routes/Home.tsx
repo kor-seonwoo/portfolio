@@ -338,6 +338,16 @@ const Option = styled.article<{$beforeBgColor: number}>`
             }
         }
     }
+    @media screen and (max-width: 1024px){
+        .inner{
+            .selectArea > button:hover{
+                opacity: .8;
+                &::before{
+                    display: none;
+                }
+            }
+        }
+    }
     @media screen and (max-width: 560px){
         height: auto;
         padding: 0 10px;
@@ -396,7 +406,7 @@ const PageButton = styled.button<{$beforeText: string}>`
         overflow: hidden;
         transition: .4s;
     }
-    &:hover,&:focus{
+    &:hover{
         &::before{
             width: 100%;
         }
@@ -422,9 +432,10 @@ const ConfirmBox = styled.section`
         font-weight: 400;
         line-height: 1.4;
         transition: opacity .6s;
+        color: #000000;
         span{
             font-weight: 600;
-            color: greenyellow;
+            color: #ffffff;
         }
     }
     > button{
@@ -455,7 +466,7 @@ const ConfirmBox = styled.section`
             border-radius: 36px;
             transition: .4s;
         }
-        &:hover,&:focus{
+        &:hover{
             color: #000000;
             &::before{
                 left: -1px;
@@ -570,10 +581,10 @@ export default function Home() {
             :
             <Warpper>
                 <Toaster
-                    position="top-right"
+                    position="bottom-center"
                     reverseOrder={false}
                     toastOptions={{
-                        duration: 4000,
+                        duration: 1500,
                     }}
                 />
                 <ProgressBar $progress={progressMath}>
