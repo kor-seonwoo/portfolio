@@ -10,6 +10,7 @@
     "@types/node": "^16.18.67",
     "@types/react": "^18.2.41",
     "@types/react-dom": "^18.2.17",
+    "gh-pages": "^6.1.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-loader-spinner": "^5.4.5",
@@ -24,7 +25,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "deploy": "gh-pages -d build",
+    "predeploy": "npm run build"
   },
   "eslintConfig": {
     "extends": [
@@ -47,5 +50,6 @@
   "devDependencies": {
     "@types/react-transition-group": "^4.4.9",
     "@types/styled-components": "^5.1.32"
-  }
+  },
+  "homepage": "https://kor-seonwoo.github.io/portfolio"
 }
